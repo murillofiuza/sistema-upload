@@ -10,7 +10,6 @@ date_default_timezone_set("America/Sao_Paulo");
 
 ?>
 
-
 <?php
 include('dbcon.php');
 if(isset($_POST['submit'])!=""){
@@ -21,16 +20,18 @@ if(isset($_POST['submit'])!=""){
   $temp=$_FILES['photo']['tmp_name'];
   $error = $_FILES['photo']['error'];
   $date = date('Y-m-d H:i:s');
+
+
 if ($error > 0) //Check file upload has error
     {
 	$_SESSION['alert'] = "danger";
-    $_SESSION['result'] = "<strong>Error:</strong> " . $error . "<br />"; //Sesssio to carry error 
+    $_SESSION['result'] = "<strong>Erro:</strong> " . $error . "<br />"; //Sesssio to carry error 
     }
   else{
 	  
 	  if ($size > 500000) { //Check File Size
 	  $_SESSION['alert'] = "danger";
-    $_SESSION['result'] = "<strong>Error:</strong> Maximum file size 5MB!!!<br />";
+    $_SESSION['result'] = "<strong>Erro:</strong> Tamanho máximo do arquivo 5MB!!!<br />";
 	  }else{
 		  $targetPath = "files/".$name;
 		  
@@ -40,16 +41,21 @@ if ($error > 0) //Check file upload has error
 				}else{
 				$rename_file = 	$name;
 				}
-  move_uploaded_file($temp,$targetPath); 
+  move_uploaded_file($temp,$targetPath);
 
+/******** Query para Cadastrar no banco de dados (By Fiuza)******/
 $query=$conn->query("INSERT INTO upload (name,rename_file,date) VALUES ('$name','$rename_file','$date')");
-if($query){
-	$_SESSION['alert'] = "success";
-	$_SESSION['result'] = "<strong>Well done!</strong> File successfully uploaded!!!";
 
+if($query){
+
+  $_SESSION['result'] = "<strong>Tudo certo! </strong> Arquivo enviado com sucesso!!!";
+	$_SESSION['alert'] = "success";
+  header('Location: index.php');
+	exit();
+  
 }
 else{
-die(mysqli_error());
+  die(mysqli_error());
 }
 	  }
   }
@@ -81,109 +87,133 @@ $(document).on('change', '.file', function(){
 });
 
 </script>
-<style>
-.table tr th{
-	
-	border:#eee 1px solid;
-	
-	position:relative;
-	font-family:"Times New Roman", Times, serif;
-	font-size:12px;
-	text-transform:uppercase;
-	}
-	table tr td{
-	
-	border:#eee 1px solid;
-	color:#000;
-	position:relative;
-	font-family:"Times New Roman", Times, serif;
-	font-size:12px;
-	
-	text-transform:uppercase;
-	}
-	
 
+<!---******** LOCAL DO CSS DA TABELA da index (By Fiuza)******---->
+  <style>
+    .table tr th{
+      
+      border:#eee 1px solid;
+      
+      position:relative;
+      font-family:"Times New Roman", Times, serif;
+      font-size:12px;
+      text-transform:uppercase;
+      }
+      table tr td{
+      
+      border:#eee 1px solid;
+      color:#000;
+      position:relative;
+      font-family:"Times New Roman", Times, serif;
+      font-size:12px;
+      
+      text-transform:uppercase;
+      }
+      
+    .file {
+      visibility: hidden;
+      position: absolute;
+    }
 
-.file {
-  visibility: hidden;
-  position: absolute;
-}
+    /******** CSS DA PAGINA INDEX *******/
+    body {
+      background-color: #EEEEEE;
+      margin: -18px 0 0 0;
+    }
 
-/*
- * Styles for demo only
- */
-body {
-  background-color: #EEEEEE;
-  margin: 50px;
-}
+    .container {
+      background-color: #fff;
+      padding: 40px 80px;
+      border-radius: 8px;
+    }
 
-.container {
-  background-color: #fff;
-  padding: 40px 80px;
-  border-radius: 8px;
-}
+    .menu {
+      background-color: #fff;
+      padding: 20px 0px;
+      border-radius: 8px;
+      text-align: left;
+    }
 
-h1 {
-  color: #000066;
-  font-size: 4rem;
-  font-weight: 900;
-  margin: 0 0 5px 0;
-  background: -webkit-linear-gradient(#fff, #999);
-  -webkit-background-clip: text;
-  /*-webkit-text-fill-color: transparent;*/
-  text-align: center;
-}
+    .font_menu{
+      color: #fff;
+      font-size: 1.7rem;
+      font-weight: 500;
+      margin: 0 0 0 0;
+      background: -webkit-linear-gradient(#fff, #999);
+      -webkit-background-clip: text;
+      /*-webkit-text-fill-color: transparent;*/
+      text-align: center;
+    }
 
-h4 {
-  color: #a990cc;
-  font-size: 24px;
-  font-weight: 400;
-  text-align: center;
-  margin: 0 0 35px 0;
-}
+    h1 {
+      color: #000066;
+      font-size: 4rem;
+      font-weight: 900;
+      margin: 0 0 5px 0;
+      background: -webkit-linear-gradient(#fff, #999);
+      -webkit-background-clip: text;
+      /*-webkit-text-fill-color: transparent;*/
+      text-align: center;
+    }
 
-.btn.btn-primary {
-  background-color: #6E1F1F;
-  border-color: #6E1F1F;
-  outline: none;
-}
-.btn.btn-primary:hover {
-  background-color: #923737;
-  border-color: #923737;
-}
-.btn.btn-primary:active, .btn.btn-primary:focus {
-  background-color: #6E1F1F;
-  border-color: #6E1F1F;
-}
-.alert-purple { border-color: #694D9F;background: #694D9F;color: #fff; }
-.alert-info-alt { border-color: #B4E1E4;background: #81c7e1;color: #fff; }
-.alert-danger-alt { border-color: #B63E5A;background: #E26868;color: #fff; }
-.alert-warning-alt { border-color: #F3F3EB;background: #E9CEAC;color: #fff; }
-.alert-success-alt { border-color: #19B99A;background: #20A286;color: #fff; }
-.glyphicon { margin-right:10px; }
-.alert a {color: gold;}
+    h4 {
+      color: #a990cc;
+      font-size: 24px;
+      font-weight: 400;
+      text-align: center;
+      margin: 0 0 35px 0;
+    }
 
-	</style>
-	
+    .btn.btn-primary {
+      background-color: #6E1F1F;
+      border-color: #6E1F1F;
+      outline: none;
+    }
+    .btn.btn-primary:hover {
+      background-color: #923737;
+      border-color: #923737;
+    }
+    .btn.btn-primary:active, .btn.btn-primary:focus {
+      background-color: #6E1F1F;
+      border-color: #6E1F1F;
+    }
+    .alert-purple { border-color: #694D9F;background: #694D9F;color: #fff; }
+    .alert-info-alt { border-color: #B4E1E4;background: #81c7e1;color: #fff; }
+    .alert-danger-alt { border-color: #B63E5A;background: #E26868;color: #fff; }
+    .alert-warning-alt { border-color: #F3F3EB;background: #E9CEAC;color: #fff; }
+    .alert-success-alt { border-color: #19B99A;background: #20A286;color: #fff; }
+    .glyphicon { margin-right:10px; }
+    .alert a {color: gold;}
+  </style>
 
-
-<h1>Sistema Upload  <img src="fonts/img/logo-site.png"></h1>
+  <br>
 
 <div class="container">
+<!--Titulo topo da Pagina-->
+   <h1>Sistema Upload <img src="fonts/img/logo-site.png"></h1>
+
+   <!--Menu da Pagina-->
+  <div class="menu">
+    <div class="font_menu">
+      <a href="index.php" class="btn btn-primary "><div class="font_menu">HOME</div></a> | 
+      <a href="index.php" class="btn btn-primary "><div class="font_menu">PAINEL ADMIN</div></a>  
+    </div>
+  </div>
+
   <form enctype="multipart/form-data"  action="" id="wb_Form1" name="form" method="post">
   <div class="form-group">
     <input  type="file" name="photo" id="photo" class="file">
     <div class="input-group col-xs-12">
       <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
-      <input type="text" class="form-control input-lg" disabled placeholder="Upload Image">
+      <input type="text" class="form-control input-lg" disabled placeholder="Buscar Arquivo">
       <span class="input-group-btn">
-        <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i> Browse</button>
+        <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i>Procurar arquivo</button>
       </span>
     </div>
   </div>
    <div class="form-group">
     <div class="input-group ">
-   <input type="submit" class="btn btn-success" name="submit" value="Submit">
+   <input type="submit" class="btn btn-success" name="submit" value="Enviar">
    </div>
    </div>
  </form> 
@@ -207,22 +237,19 @@ h4 {
 
 							<form method="post" action="delete.php" >
                         <table cellpadding="0" cellspacing="0" border="0" class="table table-condensed" id="example">
-                            
                             <thead>
-						
                                 <tr>
-                                    
-                                    <th>S.No</th>
-                                    <th>FILE NAME</th>
-                                   <th>Date</th>
-				<th>Download</th>
-				<th>Remove</th>
+                                    <th><center>ID.IMG</th>
+                                    <th><center>Nome do Arquivo</th>
+                                    <th><center>Data</th>
+                                    <th><center>Download</th>
+                                    <th><center>Remover</th>
                                 </tr>
                             </thead>
                             <tbody>
 							<?php 
 							$i=0;
-							$query=mysqli_query($conn,"select * from upload ORDER BY id DESC")or die(mysqli_error());
+							$query=mysqli_query($conn,"select * from upload ORDER BY id DESC") or die(mysqli_error());
 							while($row=mysqli_fetch_array($query)){
 							$id=$row['id'];
 							$name=$row['name'];
@@ -234,8 +261,8 @@ h4 {
                                 
                                          <td><?php echo $row['name'] ?></td>
                                          <td><?php echo $row['date'] ?></td>
-										<td><a href="download.php?filename=<?php echo $row['rename_file'];?>"  title="click to download"><label class="btn btn-success" style="width: 40px;font-size: 16px;"><span class="glyphicon glyphicon-download"></span></label></a></td>
-										<td><a href="delete.php?del=<?php echo $row['id']?>"><label style="width: 40px;font-size: 16px;" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></label></a></td>
+										<td><center><a href="download.php?filename=<?php echo $row['rename_file'];?>"  title="click to download"><label class="btn btn-success" style="width: 40px;font-size: 16px;"><span class="glyphicon glyphicon-download"></span></label></a></td>
+										<td><center><a href="delete.php?del=<?php echo $row['id']?>"><label style="width: 40px;font-size: 16px;" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></label></a></td>
 										</tr>
                          
 						          <?php } ?>
