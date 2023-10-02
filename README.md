@@ -1,6 +1,3 @@
-# sistema-upload
-
-
 <h1 align="center">:file_cabinet: Sistema-upload </h1>
 
 ## :memo: Descrição
