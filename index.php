@@ -12,6 +12,7 @@ date_default_timezone_set("America/Sao_Paulo");
 
 <?php
 include('dbcon.php');
+
 if(isset($_POST['submit'])!=""){
    $name=$_FILES['photo']['name'];
 
@@ -22,14 +23,14 @@ if(isset($_POST['submit'])!=""){
   $date = date('Y-m-d H:i:s');
 
 
-if ($error > 0) //Check file upload has error
+if ($error > 0) //Check arquivo upload has error
     {
 	$_SESSION['alert'] = "danger";
     $_SESSION['result'] = "<strong>Erro:</strong> " . $error . "<br />"; //Sesssio to carry error 
     }
   else{
 	  
-	  if ($size > 500000) { //Check File Size
+	  if ($size > 500000) { //Check tamanho de arquivo
 	  $_SESSION['alert'] = "danger";
     $_SESSION['result'] = "<strong>Erro:</strong> Tamanho máximo do arquivo 5MB!!!<br />";
 	  }else{
@@ -61,7 +62,6 @@ else{
   }
 }
 ?>
-
 
 <html>
 <body>
@@ -200,7 +200,7 @@ $(document).on('change', '.file', function(){
     </div>
   </div>
 
-  <form enctype="multipart/form-data"  action="" id="wb_Form1" name="form" method="post">
+<form enctype="multipart/form-data"  action="" id="wb_Form1" name="form" method="post">
   <div class="form-group">
     <input  type="file" name="photo" id="photo" class="file">
     <div class="input-group col-xs-12">
@@ -216,14 +216,14 @@ $(document).on('change', '.file', function(){
    <input type="submit" class="btn btn-success" name="submit" value="Enviar">
    </div>
    </div>
- </form> 
+</form> 
 
 
 
 
  <div class = "row">
- <?php if(isset($_SESSION['result'])){ ?>
-<div class="alert alert-<?php echo $_SESSION['alert'] ?>-alt alert-dismissable">
+    <?php if(isset($_SESSION['result'])){ ?>
+          <div class="alert alert-<?php echo $_SESSION['alert'] ?>-alt alert-dismissable">
                 <span class="glyphicon glyphicon-certificate"></span>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                     ×</button> <?php echo $_SESSION['result']; ?>
@@ -252,15 +252,16 @@ $(document).on('change', '.file', function(){
 							$query=mysqli_query($conn,"select * from upload ORDER BY id DESC") or die(mysqli_error());
 							while($row=mysqli_fetch_array($query)){
 							$id=$row['id'];
+              $img = $row['rename_file'];
 							$name=$row['name'];
 							$date=$row['date'];
 							?>
                               
 										<tr>
-										<td><?php echo ++$i; ?></td>
-                                
-                                         <td><?php echo $row['name'] ?></td>
-                                         <td><?php echo $row['date'] ?></td>
+										<td><center><?php echo ++$i; ?></td>
+                    <td><center><img src='files/<?php echo $img ?>' height='90' width='90' /> </td>
+                    <td><?php echo $row['name'] ?></td>
+                    <td><center><?php echo $row['date'] ?></td>
 										<td><center><a href="download.php?filename=<?php echo $row['rename_file'];?>"  title="click to download"><label class="btn btn-success" style="width: 40px;font-size: 16px;"><span class="glyphicon glyphicon-download"></span></label></a></td>
 										<td><center><a href="delete.php?del=<?php echo $row['id']?>"><label style="width: 40px;font-size: 16px;" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></label></a></td>
 										</tr>
@@ -272,14 +273,14 @@ $(document).on('change', '.file', function(){
                               
                                
 								
-                            </div>
+        </div>
           
-</form>
+        </form>
 
-        </div>
-        </div>
-        </div>
+      </div>
+    </div>
   </div>
+</div>
 
 
 </body>
