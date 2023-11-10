@@ -1,13 +1,13 @@
 <h1 align="center">:file_cabinet: Sistema-upload </h1>
 
 ## :memo: Descrição
-Sistema de upload para o hospital, no intuito de organizar as imagens dos setores dos parcientes.
+Sistema de upload, para organizar as imagens dos setores dos parcientes ou em uma area administrativa.
 
 ## :books: Funcionalidades
-* <b>Upload de Imagens</b>: A imagem é lancada no sistema para organizar o armazenamento.
+* <b>Upload de Imagens</b>: A imagem é lançada no sistema para organizar o armazenamento.
 
 ## :wrench: Tecnologias utilizadas
-* PHP 8;
+* PHP 7.4;
 * MYSQL
 * CSS
 * JS
